@@ -39,7 +39,7 @@ class VehicleDetector:
                         count += 1
 
             # Draw all detections
-            annotated_img = result.plot()
+            annotated_img = image.copy()
 
             # Draw the detection zone (bottom half box)
             cv2.rectangle(annotated_img, (detection_zone[0], detection_zone[1]),
