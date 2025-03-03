@@ -64,12 +64,11 @@ def run_signal_simulation(controller):
 
 # --- Signal State Display (live update view) ---
 def show_current_signal_state():
-    """Show which direction is green, how much time is left, and vehicle counts"""
     counts = st.session_state.signal_data['counts']
     images = st.session_state.signal_data['images']
     timings = st.session_state.signal_data['timings']
 
-    st.subheader("🚥 Live Traffic Signal Status")
+    st.subheader("🚥 Current Traffic Signal Status")
 
     cols = st.columns(4)
 
@@ -79,13 +78,11 @@ def show_current_signal_state():
         is_currently_green = (idx == st.session_state.current_direction_index)
 
         with col:
+            st.image(images[idx], caption=f"Direction {idx + 1}", use_container_width=True)
             st.markdown(f"### 🚗 {vehicle_count} vehicles")
 
             if is_currently_green:
                 st.markdown(f"**🟢 Green Light: {st.session_state.remaining_time} sec**")
-
-                # 🔄 Show latest image ONLY for the active green lane
-                st.image(images[idx], caption=f"Live View - Direction {idx + 1}", use_container_width=True)
             else:
                 st.markdown(f"**🔴 Red Light** (Next green in: {time_until_green(idx, timings)})")
 
