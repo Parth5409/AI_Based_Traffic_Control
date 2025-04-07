@@ -14,3 +14,4 @@ scipy==1.15.2
 requests==2.32.3
 tqdm==4.67.1
 psutil==7.0.0
+rich<14,>=10.14.0
