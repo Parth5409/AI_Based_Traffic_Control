@@ -1,0 +1,19 @@
+{
+    "builds": [
+        {
+            "src": "main.py",
+            "use": "@vercel/python",
+            "config": {
+                "runtime": "python3.9",
+                "buildCommand": "pip install -r requirements.txt",
+                "installCommand": "pip install streamlit"
+            }
+        }
+    ],
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "main.py"
+        }
+    ]
+}
