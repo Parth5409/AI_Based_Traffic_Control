@@ -44,7 +44,7 @@ if 'intersection_confirmed' not in st.session_state:
 if 'intersection_coords' not in st.session_state:
     st.session_state.intersection_coords = None
 if 'map_center' not in st.session_state:
-    st.session_state.map_center = [20.5937, 78.9629]
+    st.session_state.map_center = [16.7050, 74.2433]  # Coordinates for Kolhapur city center
 
 def verify_intersection(lat: float, lng: float) -> Tuple[bool, Optional[str], Optional[Tuple[float, float]]]:
     """Verify if coordinates represent a 4-way intersection using Overpass API"""
@@ -176,10 +176,19 @@ def create_map():
                 time.sleep(1)  # Brief pause to show the success message
                 st.rerun()
         else:
-            st.warning(f"⚠️ {error_msg}")
-            st.info("Please select a different location or proceed manually if you're sure this is a 4-way intersection.")
+            st.markdown(f"""
+                <div style="padding: 1rem; border-radius: 0.5rem; background-color: #FFF3CD; border: 1px solid #FFE69C; margin-bottom: 1rem;">
+                    <p style="color: #000000; margin: 0; font-size: 1rem;">⚠️ {error_msg}</p>
+                </div>
+            """, unsafe_allow_html=True)
             
-            is_4way = st.checkbox("✓ I confirm this is a 4-way intersection")
+            st.markdown("""
+                <div style="padding: 1rem; border-radius: 0.5rem; background-color: #E7F3FE; border: 1px solid #C2E0FF; margin-bottom: 1rem;">
+                    <p style="color: #000000; margin: 0; font-size: 1rem;">Please select a different location or proceed manually if you're sure this is a 4-way intersection.</p>
+                </div>
+            """, unsafe_allow_html=True)
+            
+            is_4way = False
             if is_4way:
                 st.session_state.intersection_coords = [lat, lng]
                 st.session_state.map_center = [lat, lng]
