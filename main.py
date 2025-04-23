@@ -281,7 +281,7 @@ def show_traffic_control_interface(show_map=False):
             for key in ['intersection_selected', 'intersection_confirmed', 'intersection_coords', 'temp_coords', 'signal_data']:
                 if key in st.session_state:
                     del st.session_state[key]
-            st.session_state.map_center = [20.5937, 78.9629]
+            st.session_state.map_center = [16.7050, 74.2433]
             st.rerun()
 
     if show_map and not st.session_state.get('signal_data'):
@@ -300,7 +300,7 @@ def show_traffic_control_interface(show_map=False):
             total_vehicles = sum(st.session_state.signal_data['counts'].values())
             st.markdown(f"""
                 <div style="background: white; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                    <p style="color: #000; font-size: 2rem; font-weight: 700; margin: 0.5rem 0 0 0;">🚗 Total Vehicles Detected: {total_vehicles}</p>
+                    <p style="color: #000; font-size: 1rem; font-weight: 700; margin: 0.5rem 0 0 0;">🚗 Total Vehicles Detected: {total_vehicles}</p>
                 </div>
             """, unsafe_allow_html=True)
 
@@ -386,6 +386,19 @@ def countdown_and_cycle_signals(timings):
     if st.session_state.remaining_time > 0:
         time.sleep(1)
         st.session_state.remaining_time -= 1
+        # Instead of st.rerun(), use JavaScript to update specific elements
+        st.markdown(
+            """
+            <script>
+                // Preserve scroll position
+                var scrollPos = window.scrollY;
+                setTimeout(function() {
+                    window.scrollTo(0, scrollPos);
+                }, 100);
+            </script>
+            """,
+            unsafe_allow_html=True
+        )
         st.rerun()
     else:
         handle_lane_switch(timings)
@@ -396,10 +409,34 @@ def handle_lane_switch(timings):
     if st.session_state.current_direction_index >= 4:
         st.session_state.current_direction_index = 0
         st.session_state.auto_restart = True
+        # Add scroll preservation here too
+        st.markdown(
+            """
+            <script>
+                var scrollPos = window.scrollY;
+                setTimeout(function() {
+                    window.scrollTo(0, scrollPos);
+                }, 100);
+            </script>
+            """,
+            unsafe_allow_html=True
+        )
         st.rerun()
     else:
         next_dir = f"Direction_{st.session_state.current_direction_index + 1}"
         st.session_state.remaining_time = timings[next_dir]
+        # And here
+        st.markdown(
+            """
+            <script>
+                var scrollPos = window.scrollY;
+                setTimeout(function() {
+                    window.scrollTo(0, scrollPos);
+                }, 100);
+            </script>
+            """,
+            unsafe_allow_html=True
+        )
         st.rerun()
 
 def time_until_green(target_index, timings):
